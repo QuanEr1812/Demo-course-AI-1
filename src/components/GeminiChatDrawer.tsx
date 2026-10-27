@@ -90,12 +90,30 @@ export const GeminiChatDrawer: React.FC<GeminiChatDrawerProps> = ({
       };
       setMessages((prev) => [...prev, assistantMsg]);
     } catch (err) {
-      // Safe fallback
+      // Client-side fallback for static environments like GitHub Pages
+      const qLower = text.toLowerCase();
+      let fallbackText = '';
+
+      if (qLower.includes('overfitting') || qLower.includes('quá khớp')) {
+        fallbackText =
+          '**Hiện tượng Overfitting (Quá khớp)** xảy ra khi mô hình học thuộc lòng cả các chi tiết nhiễu trong tập dữ liệu huấn luyện, khiến điểm số trên tập train rất cao nhưng dự đoán rất kém trên dữ liệu mới.\n\n💡 **Cách khắc phục chính (Trang 29 - Mục 3.5):**\n1. **Bổ sung dữ liệu huấn luyện:** Cung cấp thêm mẫu dữ liệu đa dạng.\n2. **Kỹ thuật Dropout:** Tạm thời ngắt ngẫu nhiên một tỷ lệ nơ-ron trong quá trình train.\n3. **Regularization (L1/L2):** Phạt các trọng số có độ lớn bất thường.\n4. **Đơn giản hóa mô hình:** Giảm bớt số lượng tầng ẩn hoặc tham số.';
+      } else if (qLower.includes('giám sát') || qLower.includes('supervised')) {
+        fallbackText =
+          '**Học có giám sát (Supervised Learning)** là phương pháp mà tập dữ liệu bắt buộc phải có cặp đầu vào (Features) đi kèm nhãn mục tiêu (Labels) được gán từ trước.\n\n📌 **Hai bài toán tiêu biểu (Trang 14 - Mục 2.1):**\n- **Hồi quy (Regression):** Dự đoán giá trị liên tục (ví dụ: dự đoán giá nhà, nhiệt độ).\n- **Phân loại (Classification):** Dự đoán nhãn rời rạc (ví dụ: phân loại email rác / hợp lệ, chẩn đoán bệnh).';
+      } else if (qLower.includes('hàm mất mát') || qLower.includes('loss')) {
+        fallbackText =
+          '**Hàm mất mát (Loss Function)** đo lường độ sai lệch giữa đầu ra dự đoán của mô hình và nhãn thực tế.\n\n🎯 **Ý nghĩa cốt lõi (Trang 22 - Mục 3.2):**\nNó đóng vai trò như chiếc la bàn chỉ đường; giải thuật Gradient Descent sẽ dựa vào đạo hàm (gradient) của hàm mất mát để điều chỉnh các trọng số mạng nơ-ron về trạng thái tối ưu nhất.';
+      } else if (qLower.includes('ảo giác') || qLower.includes('hallucination')) {
+        fallbackText =
+          '**Ảo giác AI (Hallucination)** là hiện tượng các mô hình sinh (như LLM) tạo ra thông tin hư cấu hoặc sai lệch nhưng lại trình bày với giọng điệu rất tự tin và hợp lý.\n\n⚠️ **Mẹo ôn tập (Trang 38 - Mục 4.2):**\nBản chất LLM là mô hình dự đoán xác suất từ kế tiếp, không phải cơ sở dữ liệu chân lý. Vì vậy người học luôn cần đối chiếu với tài liệu gốc!';
+      } else {
+        fallbackText = `Chào bạn! Về câu hỏi "${text}", trong tài liệu "Nhập môn Trí tuệ nhân tạo.pdf", nội dung này liên quan mật thiết đến quá trình xây dựng và tối ưu mô hình học máy. Bạn có thể xem thêm tại Mục 2 & Mục 3 của tài liệu để nắm chắc công thức và ví dụ thực tế nhé!`;
+      }
+
       const fallbackMsg: ChatMessage = {
         id: `msg-ai-fallback-${Date.now()}`,
         role: 'assistant',
-        text:
-          'Trong tài liệu "Nhập môn Trí tuệ nhân tạo.pdf", nội dung này được đề cập ở Chương 2 và Chương 3. Bạn nên chú ý đọc kỹ các bảng công thức và ví dụ minh họa của giảng viên nhé!',
+        text: fallbackText,
         timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }),
       };
       setMessages((prev) => [...prev, fallbackMsg]);
