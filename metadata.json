@@ -1,0 +1,6 @@
+{
+  "name": "StudyAI - Trợ lý ôn tập & phân tích tài liệu thông minh",
+  "description": "Nền tảng hỗ trợ học tập thông minh cho sinh viên: phân tích tài liệu, trích xuất khái niệm trọng tâm, tự động tạo bộ câu hỏi trắc nghiệm và ôn tập hiệu quả.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
